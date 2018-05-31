@@ -13,9 +13,9 @@ namespace LoanPaymentCalculatorApp
     {
         static void Main(string[] args)
         {
-            FileInfo sourceFile = new FileInfo(@"input.txt");
-            TextReader sourceFileReader = new StreamReader(sourceFile.FullName);
-            Console.SetIn(sourceFileReader);
+            //FileInfo sourceFile = new FileInfo(@"input.txt");
+            //TextReader sourceFileReader = new StreamReader(sourceFile.FullName);
+            //Console.SetIn(sourceFileReader);
 
             Dictionary<string, string> dict = CreateInputDictionary.CreateDict();
 
