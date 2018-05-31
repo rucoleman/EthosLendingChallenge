@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{ED645B0B-198C-497E-A74B-2F10E215968D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleAppAryFromUserInput</RootNamespace>
-    <AssemblyName>ConsoleAppAryFromUserInput</AssemblyName>
+    <RootNamespace>LoanPaymentCalculatorApp</RootNamespace>
+    <AssemblyName>LoanPaymentCalculatorApp</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

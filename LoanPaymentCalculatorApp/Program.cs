@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LoanCalc;
 
-namespace ConsoleAppAryFromUserInput
+namespace LoanPaymentCalculatorApp
 {
     class Program
     {
