@@ -26,8 +26,12 @@ namespace LoanCalc
         [JsonProperty(PropertyName = "total payment")]
         public string totalPayment { get; set; }
     }
+
     public class LoanCalculator
     {
+        public const string DownpaymentMoreThanLoanAmountMessage = "Down payment must be less than loan amount";
+        public const string NegativeNumberNotAllowedMessage = "Negative number not allowed";
+
         public string DoTheMath(LoanCalcInput input)
         {
             // M = payment amount
@@ -39,6 +43,8 @@ namespace LoanCalc
             // M = P * (J / (1 - (1 + J)^-N))
             // TotalPayments = M * N
             // TotalInterest = TotalPayments - P
+
+            ValdateInput(input);
 
             int principal = input.amount - input.downpayment;
             int numpayments = input.term * 12;
@@ -60,6 +66,30 @@ namespace LoanCalc
                 totalPayment = totalPaymentsFormatted
             };
             return JsonConvert.SerializeObject(loanCalcOutput);
+        }
+
+        private void ValdateInput(LoanCalcInput input)
+        {
+            if (input.amount < 0)
+            {
+                throw new ArgumentOutOfRangeException("input.amount", input.amount, NegativeNumberNotAllowedMessage);
+            }
+            if (input.downpayment < 0)
+            {
+                throw new ArgumentOutOfRangeException("input.downpayment", input.downpayment, NegativeNumberNotAllowedMessage);
+            }
+            if (input.term < 0)
+            {
+                throw new ArgumentOutOfRangeException("input.term", input.term, NegativeNumberNotAllowedMessage);
+            }
+            if (input.interest < 0)
+            {
+                throw new ArgumentOutOfRangeException("input.interest", input.interest, NegativeNumberNotAllowedMessage);
+            }
+            if (input.downpayment > input.amount)
+            {
+                throw new ArgumentOutOfRangeException("input.downpayment", input.downpayment, DownpaymentMoreThanLoanAmountMessage);
+            }
         }
     }
 }

@@ -14,6 +14,12 @@ namespace LoanPaymentCalculatorApp
         {
             _dict = dict;
         }
+
+        public const string LoanAmountBadFormatMessage = "Loan amount not formatted correctly";
+        public const string InterestRateBadFormatMessage = "Interest rate not formatted correctly";
+        public const string DownPaymentBadFormatMessage = "Down payment not formatted correctly";
+        public const string LoanTermBadFormatMessage = "Loan term not formatted correctly";
+
         public LoanCalcInput GetLoanCalcInput()
         {
             int parsedloanamount;
@@ -22,20 +28,19 @@ namespace LoanPaymentCalculatorApp
             int parsedterm;
             if (!int.TryParse(_dict["amount"], out parsedloanamount))
             {
-                Console.WriteLine(string.Format("loan amount given {0} is not in the correct format", _dict["amount"]));
+                throw new ArgumentOutOfRangeException("amount", _dict["amount"], LoanAmountBadFormatMessage);
             }
-            if (!float.TryParse(_dict["interest"], out parsedrate))
-            {
-                Console.WriteLine(string.Format("interest rate given {0} is not in the correct format", _dict["interest"]));
-            }
+            parsedrate = GetRateFromDict();
             if (!int.TryParse(_dict["downpayment"], out parseddownpayment))
             {
-                Console.WriteLine(string.Format("down payment amount given {0} is not in the correct format", _dict["downpayment"]));
+                throw new ArgumentOutOfRangeException("downpayment", _dict["downpayment"], DownPaymentBadFormatMessage);
             }
             if (!int.TryParse(_dict["term"], out parsedterm))
             {
-                Console.WriteLine(string.Format("loan term given {0} is not in the correct format", _dict["term"]));
+                throw new ArgumentOutOfRangeException("term", _dict["term"], LoanTermBadFormatMessage);
             }
+
+ 
 
             LoanCalcInput loanCalcInput = new LoanCalcInput()
             {
@@ -46,6 +51,27 @@ namespace LoanPaymentCalculatorApp
             };
 
             return loanCalcInput;
+        }
+        private float GetRateFromDict()
+        {
+            string rate = _dict["interest"];
+            bool givenAsPercentage = false;
+            if (rate.EndsWith("%"))
+            {
+                rate = rate.Remove(rate.Length - 1);
+                givenAsPercentage = true;
+            }
+            float parsedrate;
+            if (!float.TryParse(rate, out parsedrate))
+            {
+                throw new ArgumentOutOfRangeException("interest", _dict["interest"], InterestRateBadFormatMessage);
+            }
+            if (!givenAsPercentage)
+            {
+                parsedrate *= 100;
+            }
+
+            return parsedrate;
         }
     }
 }
