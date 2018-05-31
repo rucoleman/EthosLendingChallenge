@@ -1,0 +1,4 @@
+downpayment: 20000
+interest: 5.5%
+amount: 100000
+term: 30
