@@ -28,7 +28,7 @@ namespace LoanCalc
     }
     public class LoanCalculator
     {
-        public string DoTheMath(LoanCalcInput input)
+        public LoanCalcOutput DoTheMath(LoanCalcInput input)
         {
             // M = payment amount
             // P = principal (amount of money borrowed)
@@ -59,7 +59,7 @@ namespace LoanCalc
                 totalInterest = totalInterestFormatted,
                 totalPayment = totalPaymentsFormatted
             };
-            return JsonConvert.SerializeObject(loanCalcOutput);
+            return loanCalcOutput;
         }
     }
 }

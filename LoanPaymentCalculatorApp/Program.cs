@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LoanCalc;
+using Newtonsoft.Json;
 
 namespace ConsoleAppAryFromUserInput
 {
@@ -22,7 +23,8 @@ namespace ConsoleAppAryFromUserInput
             LoanCalcInputFromDict loanCalcInputFromDict = new LoanCalcInputFromDict(dict);
 
             LoanCalculator loanCalculator = new LoanCalculator();
-            string answerJSON = loanCalculator.DoTheMath(loanCalcInputFromDict.GetLoanCalcInput());
+            LoanCalcOutput loanCalcOutput = loanCalculator.DoTheMath(loanCalcInputFromDict.GetLoanCalcInput());
+            string answerJSON = JsonConvert.SerializeObject(loanCalcOutput);
             Console.WriteLine(answerJSON);
         }
     }
