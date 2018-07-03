@@ -13,40 +13,26 @@ namespace LoanPaymentCalculatorApp
     {
         static void Main(string[] args)
         {
-            //FileInfo sourceFile = new FileInfo(@"input.txt");
-            //TextReader sourceFileReader = new StreamReader(sourceFile.FullName);
-            //Console.SetIn(sourceFileReader);
+            FileInfo sourceFile = new FileInfo(@"input.txt");
+            TextReader sourceFileReader = new StreamReader(sourceFile.FullName);
+            Console.SetIn(sourceFileReader);
 
-            Dictionary<string, string> dict = CreateInputDictionary.CreateDict();
-
-            LoanCalcInputFromDict loanCalcInputFromDict = new LoanCalcInputFromDict(dict);
-
-            LoanCalculator loanCalculator = new LoanCalculator();
-            LoanCalcInput loanCalcInput = null;
             try
             {
-                loanCalcInput = loanCalcInputFromDict.GetLoanCalcInput();
+                var dict = CreateInputDictionary.CreateDict();
+
+                var converter = new InputConverter(dict);
+                var loanCalcInput = converter.ToLoanCalcInput();
+
+                var loanCalculator = new LoanCalculator();
+                var answerJSON = loanCalculator.DoTheMath(loanCalcInput);
+                Console.WriteLine(answerJSON);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            if (loanCalcInput != null)
-            {
-                string answerJSON = null;
-                try
-                {
-                    answerJSON = loanCalculator.DoTheMath(loanCalcInput);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                if (answerJSON != null)
-                {
-                    Console.WriteLine(answerJSON);
-                }
-            }
+
         }
     }
 }

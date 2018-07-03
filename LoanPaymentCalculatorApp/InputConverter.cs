@@ -7,10 +7,10 @@ using LoanCalc;
 
 namespace LoanPaymentCalculatorApp
 {
-    class LoanCalcInputFromDict
+    class InputConverter
     {
         private Dictionary<string, string> _dict;
-        public LoanCalcInputFromDict(Dictionary<string, string> dict)
+        public InputConverter(Dictionary<string, string> dict)
         {
             _dict = dict;
         }
@@ -20,27 +20,30 @@ namespace LoanPaymentCalculatorApp
         public const string DownPaymentBadFormatMessage = "Down payment not formatted correctly";
         public const string LoanTermBadFormatMessage = "Loan term not formatted correctly";
 
-        public LoanCalcInput GetLoanCalcInput()
+        private const string AMOUNT = "amount";
+        private const string RATE = "interest";
+        private const string DOWN = "downpayment";
+        private const string TERM = "term";
+
+        public LoanCalcInput ToLoanCalcInput()
         {
             int parsedloanamount;
             float parsedrate;
             int parseddownpayment;
             int parsedterm;
-            if (!int.TryParse(_dict["amount"], out parsedloanamount))
+            if (!int.TryParse(_dict[AMOUNT], out parsedloanamount))
             {
-                throw new ArgumentOutOfRangeException("amount", _dict["amount"], LoanAmountBadFormatMessage);
+                throw new ArgumentOutOfRangeException(AMOUNT, _dict[AMOUNT], LoanAmountBadFormatMessage);
             }
             parsedrate = GetRateFromDict();
-            if (!int.TryParse(_dict["downpayment"], out parseddownpayment))
+            if (!int.TryParse(_dict[DOWN], out parseddownpayment))
             {
-                throw new ArgumentOutOfRangeException("downpayment", _dict["downpayment"], DownPaymentBadFormatMessage);
+                throw new ArgumentOutOfRangeException(DOWN, _dict[DOWN], DownPaymentBadFormatMessage);
             }
-            if (!int.TryParse(_dict["term"], out parsedterm))
+            if (!int.TryParse(_dict[TERM], out parsedterm))
             {
-                throw new ArgumentOutOfRangeException("term", _dict["term"], LoanTermBadFormatMessage);
+                throw new ArgumentOutOfRangeException(TERM, _dict[TERM], LoanTermBadFormatMessage);
             }
-
- 
 
             LoanCalcInput loanCalcInput = new LoanCalcInput()
             {
@@ -54,7 +57,7 @@ namespace LoanPaymentCalculatorApp
         }
         private float GetRateFromDict()
         {
-            string rate = _dict["interest"];
+            string rate = _dict[RATE];
             bool givenAsPercentage = false;
             if (rate.EndsWith("%"))
             {
@@ -64,7 +67,7 @@ namespace LoanPaymentCalculatorApp
             float parsedrate;
             if (!float.TryParse(rate, out parsedrate))
             {
-                throw new ArgumentOutOfRangeException("interest", _dict["interest"], InterestRateBadFormatMessage);
+                throw new ArgumentOutOfRangeException(RATE, _dict[RATE], InterestRateBadFormatMessage);
             }
             if (!givenAsPercentage)
             {
