@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LoanCalc;
+﻿// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace LoanPaymentCalculatorApp
 {
-    class Program
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using LoanCalc;
+
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             string[] input = null;
 
@@ -20,13 +24,14 @@ namespace LoanPaymentCalculatorApp
                 input = File.ReadAllLines(args[0]);
             }
             else
-            { 
+            {
                 var lines = new List<string>();
                 string line;
-                while ((line = Console.ReadLine()) != null && line != "")
+                while ((line = Console.ReadLine()) != null && line != string.Empty)
                 {
                     lines.Add(line);
                 }
+
                 input = lines.ToArray();
             }
 
@@ -50,7 +55,6 @@ namespace LoanPaymentCalculatorApp
             {
                 Console.WriteLine(ex.Message);
             }
-
         }
     }
 }
