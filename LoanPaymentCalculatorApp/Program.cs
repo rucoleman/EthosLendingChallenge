@@ -13,14 +13,32 @@ namespace LoanPaymentCalculatorApp
     {
         static void Main(string[] args)
         {
-            FileInfo sourceFile = new FileInfo(@"input.txt");
-            TextReader sourceFileReader = new StreamReader(sourceFile.FullName);
-            Console.SetIn(sourceFileReader);
+            string[] input = null;
+
+            if (args.Length == 1)
+            {
+                input = File.ReadAllLines(args[0]);
+            }
+            else
+            { 
+                var lines = new List<string>();
+                string line;
+                while ((line = Console.ReadLine()) != null && line != "")
+                {
+                    lines.Add(line);
+                }
+                input = lines.ToArray();
+            }
+
+            input.ToList().ForEach(l => Console.WriteLine(l));
+
+            var dict = input.Select(t => t.Split(':'))
+                .ToDictionary(t => t[0].Trim(), t => t[1].Trim());
+
+            dict.ToList().ForEach(ent => Console.WriteLine($"<debug k='{ent.Key}' v='{ent.Value}'/>"));
 
             try
             {
-                var dict = CreateInputDictionary.CreateDict();
-
                 var converter = new InputConverter(dict);
                 var loanCalcInput = converter.ToLoanCalcInput();
 
