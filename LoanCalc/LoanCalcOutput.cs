@@ -4,14 +4,16 @@
 
 namespace LoanCalc
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Newtonsoft.Json;
 
-    public class LoanCalcOutput
+    /// <summary>
+    /// The loan calculator DoTheMath method returns this class, not directly,
+    /// but formatted as a JSON string. PropertyName attributes are used in
+    /// order to ensure JSON object fields are named as specified in the problem
+    /// statement. In the DoTheMath method, all these fields are strings
+    /// formatted in dollars and cents, with a decimal point and no dollar sign.
+    /// </summary>
+    internal class LoanCalcOutput
     {
         [JsonProperty(PropertyName = "monthly payment")]
         public string MonthlyPayment { get; set; }
