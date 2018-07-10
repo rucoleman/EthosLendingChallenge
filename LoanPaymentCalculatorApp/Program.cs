@@ -17,7 +17,7 @@ namespace LoanPaymentCalculatorApp
     {
         private static void Main(string[] args)
         {
-            string[] input = null;
+            var input = null as string[];
 
             if (args.Length == 1)
             {
@@ -26,7 +26,7 @@ namespace LoanPaymentCalculatorApp
             else
             {
                 var lines = new List<string>();
-                string line;
+                var line = null as string;
                 while ((line = Console.ReadLine()) != null && line != string.Empty)
                 {
                     lines.Add(line);

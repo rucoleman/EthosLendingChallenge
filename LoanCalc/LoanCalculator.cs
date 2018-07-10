@@ -13,11 +13,14 @@ namespace LoanCalc
 
     public class LoanCalculator
     {
-        public const string DownpaymentMoreThanLoanAmountMessage = "Down payment must be less than loan amount";
+        public const string DownPaymentMoreThanLoanAmountMessage = "Down payment must be less than loan amount";
         public const string NegativeNumberNotAllowedMessage = "Negative number not allowed";
 
         public string DoTheMath(LoanCalcInput input)
         {
+            // Check some typical error cases and throw
+            this.ValdateInput(input);
+
             /*
                 The following formula is implemeted here:
 
@@ -31,27 +34,28 @@ namespace LoanCalc
                 TotalPayments = M * N
                 TotalInterest = TotalPayments - P
             */
-            this.ValdateInput(input);
 
-            int principal = input.Amount - input.DownPayment;
-            int numpayments = input.Term * 12;
-            double negnumpayments = numpayments * -1.0;
-            double effectiveinterest = (input.Interest / 100.0) / 12;
-            double monthlypayment = principal * (effectiveinterest / (1 - Math.Pow(1 + effectiveinterest, negnumpayments)));
+            var principal = input.Amount - input.DownPayment;
+            var numPayments = input.Term * 12;
+            var negNumPayments = numPayments * -1.0;
 
-            double totalPayments = monthlypayment * numpayments;
-            double totalInterest = totalPayments - principal;
+            // The effective interest rate is expressed as a fraction and then divided by 12 (number of months in a year)
+            var effectiveInterest = (input.Interest / 100.0) / 12;
+            var monthlyPayment = principal * (effectiveInterest / (1 - Math.Pow(1 + effectiveInterest, negNumPayments)));
 
-            string monthlypaymentFormatted = string.Format("{0:0.00}", monthlypayment);
-            string totalInterestFormatted = string.Format("{0:0.00}", totalInterest);
-            string totalPaymentsFormatted = string.Format("{0:0.00}", totalPayments);
+            var totalPayments = monthlyPayment * numPayments;
+            var totalInterest = totalPayments - principal;
 
-            LoanCalcOutput loanCalcOutput = new LoanCalcOutput
+            // Initialize a temp object with properly formatted strings before we convert it to JSON.
+            // The LoanCalcOutput class uses specific property name attributes as required in the problem statement.
+            var loanCalcOutput = new LoanCalcOutput
             {
-                MonthlyPayment = monthlypaymentFormatted,
-                TotalInterest = totalInterestFormatted,
-                TotalPayment = totalPaymentsFormatted
+                MonthlyPayment = string.Format("{0:0.00}", monthlyPayment),
+                TotalInterest = string.Format("{0:0.00}", totalInterest),
+                TotalPayment = string.Format("{0:0.00}", totalPayments)
             };
+
+            // Use JSON.net to create a JSON-formatted string of the above temporary object
             return JsonConvert.SerializeObject(loanCalcOutput);
         }
 
@@ -79,7 +83,7 @@ namespace LoanCalc
 
             if (input.DownPayment > input.Amount)
             {
-                throw new ArgumentOutOfRangeException("input.downpayment", input.DownPayment, DownpaymentMoreThanLoanAmountMessage);
+                throw new ArgumentOutOfRangeException("input.downpayment", input.DownPayment, DownPaymentMoreThanLoanAmountMessage);
             }
         }
     }
