@@ -12,6 +12,11 @@ namespace LoanCalc
         public const string DownPaymentMoreThanLoanAmountMessage = "Down payment must be less than loan amount";
         public const string NegativeNumberNotAllowedMessage = "Negative number not allowed";
 
+        public const string ParamLabelInputAmount = "input.amount";
+        public const string ParamLabelInputDownPayment = "input.downpayment";
+        public const string ParamLabelInputTerm = "input.term";
+        public const string ParamLabelInputInterest = "input.interest";
+
         /// <summary>
         /// Calculate the loan payment based on given input data.
         /// </summary>
@@ -65,27 +70,27 @@ namespace LoanCalc
         {
             if (input.Amount < 0)
             {
-                throw new ArgumentOutOfRangeException("input.amount", input.Amount, NegativeNumberNotAllowedMessage);
+                throw new ArgumentOutOfRangeException(ParamLabelInputAmount, input.Amount, NegativeNumberNotAllowedMessage);
             }
 
             if (input.DownPayment < 0)
             {
-                throw new ArgumentOutOfRangeException("input.downpayment", input.DownPayment, NegativeNumberNotAllowedMessage);
+                throw new ArgumentOutOfRangeException(ParamLabelInputDownPayment, input.DownPayment, NegativeNumberNotAllowedMessage);
             }
 
             if (input.Term < 0)
             {
-                throw new ArgumentOutOfRangeException("input.term", input.Term, NegativeNumberNotAllowedMessage);
+                throw new ArgumentOutOfRangeException(ParamLabelInputTerm, input.Term, NegativeNumberNotAllowedMessage);
             }
 
             if (input.Interest < 0)
             {
-                throw new ArgumentOutOfRangeException("input.interest", input.Interest, NegativeNumberNotAllowedMessage);
+                throw new ArgumentOutOfRangeException(ParamLabelInputInterest, input.Interest, NegativeNumberNotAllowedMessage);
             }
 
             if (input.DownPayment > input.Amount)
             {
-                throw new ArgumentOutOfRangeException("input.downpayment", input.DownPayment, DownPaymentMoreThanLoanAmountMessage);
+                throw new ArgumentOutOfRangeException(ParamLabelInputDownPayment, input.DownPayment, DownPaymentMoreThanLoanAmountMessage);
             }
         }
     }
