@@ -14,11 +14,11 @@ namespace LoanPaymentCalculatorApp
 
     internal class Program
     {
-        private static void ProcessFile(Func<string[]> theDel)
+        private static void ProcessFile(Func<string[]> obtainInputs)
         {
             try
             {
-                var inputs = theDel();
+                var inputs = obtainInputs();
 
                 // Create a dictionary from the input lines. Each input line is
                 // supposed to be of the form 'keyword: value'. The Select method
@@ -27,14 +27,14 @@ namespace LoanPaymentCalculatorApp
                 // item is the value. The ToDictionary method creates a dictionary
                 // entry for each of the string arrays.
 
-                // Debugging: Echo the input strings to the console.
+                // Debugging: Echo the input strings to the debug listener(s).
                 inputs.ToList().ForEach(l => Debug.WriteLine(l));
 
                 var dictParams = inputs
-                                    .Select(t => t.Split(':'))
-                                    .ToDictionary(t => t[0].Trim(), t => t[1].Trim());
+                    .Select(t => t.Split(':'))
+                    .ToDictionary(t => t[0].Trim(), t => t[1].Trim());
 
-                // Debugging: echo the dictionary to the console.
+                // Debugging: echo the dictionary to the debug listener(s).
                 // Given a dictionary entry 'ent', write an interpolated string of the key and value.
                 dictParams.ToList().ForEach(ent => Debug.WriteLine($"<debug k='{ent.Key}' v='{ent.Value}'/>"));
 
@@ -65,15 +65,16 @@ namespace LoanPaymentCalculatorApp
                     lines.Add(line);
                 }
 
-                Func<string[]> capture2 = () => lines.ToArray();
-                ProcessFile(capture2);
+                // Using inline lambda function which captures the 'lines' variable.
+                ProcessFile(() => lines.ToArray());
             }
             else if (args.Length == 1)
             {
                 // Populate input array from given file.
                 var filePath = args[0];
-                Func<string[]> capture = () => File.ReadAllLines(filePath);
-                ProcessFile(capture);
+
+                // Using inline lambda function which captures the 'filePath' variable.
+                ProcessFile(() => File.ReadAllLines(filePath));
             }
             else
             {
@@ -89,18 +90,18 @@ namespace LoanPaymentCalculatorApp
                     }
                     else if (arg == "--file")
                     {
+                        // Using inline lambda function which captures the 'file' variable.
                         var file = args[iA + 1];
-                        Func<string[]> capture = () => File.ReadAllLines(file);
-                        ProcessFile(capture);
+                        ProcessFile(() => File.ReadAllLines(file));
                     }
                     else if (arg == "--all")
                     {
                         var dirInput = args[iA + 1];
                         foreach (var path in Directory.EnumerateFiles(dirInput, "*.txt"))
                         {
+                            // Using inline lambda function which captures the 'file' variable.
                             var file = path;
-                            Func<string[]> capture = () => File.ReadAllLines(file);
-                            ProcessFile(capture);
+                            ProcessFile(() => File.ReadAllLines(file));
                         }
                     }
                 }
