@@ -14,11 +14,11 @@ namespace LoanPaymentCalculatorApp
 
     internal class Program
     {
-        private static void ProcessFile(List<string> inputs)
+        private static void ProcessFile(Func<string[]> theDel)
         {
             try
             {
-                Debug.WriteLine($"<processing pathInputTxt='{inputs}'/>");
+                var inputs = theDel();
 
                 // Create a dictionary from the input lines. Each input line is
                 // supposed to be of the form 'keyword: value'. The Select method
@@ -26,15 +26,11 @@ namespace LoanPaymentCalculatorApp
                 // the first (index=0) item is the keyword and the second (index=1)
                 // item is the value. The ToDictionary method creates a dictionary
                 // entry for each of the string arrays.
-                bool isFile = inputs.Count == 1;
 
-                if (!isFile)
-                {
-                    // Debugging: Echo the input strings to the console.
-                    inputs.ForEach(l => Debug.WriteLine(l));
-                }
+                // Debugging: Echo the input strings to the console.
+                inputs.ToList().ForEach(l => Debug.WriteLine(l));
 
-                var dictParams = (isFile ? File.ReadAllLines(inputs[0]) : inputs.ToArray())
+                var dictParams = inputs
                                     .Select(t => t.Split(':'))
                                     .ToDictionary(t => t[0].Trim(), t => t[1].Trim());
 
@@ -58,10 +54,6 @@ namespace LoanPaymentCalculatorApp
 
         private static void Main(string[] args)
         {
-            // Declare string array which will be populated either with strings
-            // from a file or from standard input.
-            var input = null as string[];
-
             if (args.Length == 0)
             {
                 // cat TestInputFiles\input_orig.txt | LoanPaymentCalculatorApp\bin\Debug\LoanPaymentCalculatorApp.exe
@@ -73,12 +65,15 @@ namespace LoanPaymentCalculatorApp
                     lines.Add(line);
                 }
 
-                input = lines.ToArray();
+                Func<string[]> capture2 = () => lines.ToArray();
+                ProcessFile(capture2);
             }
             else if (args.Length == 1)
             {
                 // Populate input array from given file.
-                input = File.ReadAllLines(args[0]);
+                var filePath = args[0];
+                Func<string[]> capture = () => File.ReadAllLines(filePath);
+                ProcessFile(capture);
             }
             else
             {
@@ -95,24 +90,21 @@ namespace LoanPaymentCalculatorApp
                     else if (arg == "--file")
                     {
                         var file = args[iA + 1];
-                        ProcessFile(new List<string> { file });
-
-                        Environment.Exit(0);
+                        Func<string[]> capture = () => File.ReadAllLines(file);
+                        ProcessFile(capture);
                     }
                     else if (arg == "--all")
                     {
                         var dirInput = args[iA + 1];
                         foreach (var path in Directory.EnumerateFiles(dirInput, "*.txt"))
                         {
-                            ProcessFile(new List<string> { path });
+                            var file = path;
+                            Func<string[]> capture = () => File.ReadAllLines(file);
+                            ProcessFile(capture);
                         }
-
-                        Environment.Exit(0);
                     }
                 }
             }
-
-            ProcessFile(input.ToList());
         }
     }
 }
