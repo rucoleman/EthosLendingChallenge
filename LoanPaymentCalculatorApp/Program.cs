@@ -14,7 +14,7 @@ namespace LoanPaymentCalculatorApp
 
     internal class Program
     {
-        private static void ProcessFile(Func<string[]> obtainInputs)
+        private static void ProcessInput(Func<string[]> obtainInputs)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace LoanPaymentCalculatorApp
                 }
 
                 // Using inline lambda function which captures the 'lines' variable.
-                ProcessFile(() => lines.ToArray());
+                ProcessInput(() => lines.ToArray());
             }
             else if (args.Length == 1)
             {
@@ -74,7 +74,7 @@ namespace LoanPaymentCalculatorApp
                 var filePath = args[0];
 
                 // Using inline lambda function which captures the 'filePath' variable.
-                ProcessFile(() => File.ReadAllLines(filePath));
+                ProcessInput(() => File.ReadAllLines(filePath));
             }
             else
             {
@@ -92,7 +92,7 @@ namespace LoanPaymentCalculatorApp
                     {
                         // Using inline lambda function which captures the 'file' variable.
                         var file = args[iA + 1];
-                        ProcessFile(() => File.ReadAllLines(file));
+                        ProcessInput(() => File.ReadAllLines(file));
                     }
                     else if (arg == "--all")
                     {
@@ -101,7 +101,7 @@ namespace LoanPaymentCalculatorApp
                         {
                             // Using inline lambda function which captures the 'file' variable.
                             var file = path;
-                            ProcessFile(() => File.ReadAllLines(file));
+                            ProcessInput(() => File.ReadAllLines(file));
                         }
                     }
                 }
